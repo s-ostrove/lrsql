@@ -16,8 +16,10 @@ jobs:
       - name: Build bundle
         run: |
           sudo apt-get update
-          sudo apt-get install -y clojure curl unzip
-          make bundle BUNDLE_RUNTIMES=false
+          sudo apt-get install -y clojure curl unzip git
+          # Build only essential components for Docker (skip docs, bench, Windows exes)
+          mkdir -p target/bundle/doc
+          make target/bundle/config target/bundle/bin target/bundle/lrsql.jar target/bundle/admin target/bundle/LICENSE target/bundle/NOTICE target/bundle/customization target/bundle/bench.jar target/bundle/bench
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
