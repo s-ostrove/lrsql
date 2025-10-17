@@ -16,8 +16,18 @@ jobs:
       - name: Build bundle
         run: |
           sudo apt-get update
-          sudo apt-get install -y clojure curl unzip git
-          # Build only essential components for Docker (skip docs, bench, Windows exes)
+          # Install Java and dependencies (NOT clojure from apt)
+          sudo apt-get install -y curl unzip git openjdk-11-jdk rlwrap
+
+          # Install official Clojure CLI tools
+          curl -L -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
+          chmod +x linux-install.sh
+          sudo ./linux-install.sh
+
+          # Verify installation
+          clj --version
+
+          # Now build with proper Clojure CLI (supports -X flag)
           mkdir -p target/bundle/doc
           make target/bundle/config target/bundle/bin target/bundle/lrsql.jar target/bundle/admin target/bundle/LICENSE target/bundle/NOTICE target/bundle/customization target/bundle/bench.jar target/bundle/bench
 
